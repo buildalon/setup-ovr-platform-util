@@ -1,2 +1,21 @@
-# setup-ovr-platform-util
-A GitHub Action to setup the ovr-platform-util tool command alias.
+# Buildalon Setup ovr-platform-util
+
+[![Discord](https://img.shields.io/discord/939721153688264824.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/VM9cWJ9rjH)
+
+A GitHub Action to setup the [ovr-platform-util](https://developer.oculus.com/resources/publish-reference-platform-command-line-utility) tool command alias.
+
+## How to use
+
+```yaml
+jobs:
+  validate:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ macos-latest, windows-latest, macos, windows ]
+    steps:
+        # download and setup ovr platform util
+      - uses: buildalon/setup-ovr-platform-util@v1
+        # run commands
+      - run: 'ovr-platform-util version'
+```

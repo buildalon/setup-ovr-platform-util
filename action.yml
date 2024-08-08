@@ -1,0 +1,8 @@
+name: Buildalon Setup ovr-platform-util
+description: 'A GitHub Action to setup the ovr-platform-util tool command alias.'
+branding:
+  icon: 'terminal'
+  color: 'red'
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
