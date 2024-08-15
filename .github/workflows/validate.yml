@@ -21,8 +21,7 @@ jobs:
       matrix:
         os: [ macos-latest, windows-latest ]
     steps:
-      - name: checkout self
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       - name: buildalon/setup-ovr-platform-util
         uses: ./
       - run: 'ovr-platform-util version'
