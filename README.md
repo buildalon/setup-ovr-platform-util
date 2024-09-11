@@ -19,3 +19,9 @@ jobs:
         # run commands
       - run: 'ovr-platform-util version'
 ```
+
+### inputs
+
+| Name | Description | Required |
+| ---- | ----------- | -------- |
+| `self-update` | Automatically update the ovr-platform-util tool. | Defaults to `true`. |
