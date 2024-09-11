@@ -33280,10 +33280,20 @@ async function setup_ovrPlatformUtil() {
         fs.promises.access(tool);
         core.debug(`Found ${tool} in ${toolDirectory}`);
         await exec.exec(tool, ['self-update']);
+        await new Promise(resolve => setTimeout(resolve, 1000));
     }
     core.debug(`${ovrPlatformUtil} -> ${toolDirectory}`);
     core.addPath(toolDirectory);
-    await exec.exec(ovrPlatformUtil, ['help']);
+    try {
+        await exec.exec(ovrPlatformUtil, ['help']);
+    }
+    catch (error) {
+        if (error.code === 'EBUSY') {
+            core.debug(`Waiting for ${tool} to be released...`);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            await exec.exec(ovrPlatformUtil, ['help']);
+        }
+    }
 }
 function getDownloadUrl() {
     if (IS_MAC) {
