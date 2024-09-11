@@ -24,4 +24,4 @@ jobs:
 
 | Name | Description | Required |
 | ---- | ----------- | -------- |
-| `auto-update` | Automatically update the ovr-platform-util tool. | Defaults to `true`. |
+| `self-update` | Automatically update the ovr-platform-util tool. | Defaults to `true`. |
