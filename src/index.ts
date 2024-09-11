@@ -37,25 +37,19 @@ async function setup_ovrPlatformUtil(): Promise<void> {
         const downloadVersion = await getVersion(archivePath);
         core.debug(`Setting tool cache: ${archivePath} | ${toolPath} | ${ovrPlatformUtil} | ${downloadVersion}`);
         toolDirectory = await tc.cacheFile(archivePath, toolPath, ovrPlatformUtil, downloadVersion);
-        tool = getExecutable(toolDirectory);
+        tool = await getExecutable(toolDirectory);
     } else {
-        tool = getExecutable(toolDirectory);
-        fs.promises.access(tool);
-        core.debug(`Found ${tool} in ${toolDirectory}`);
-        await exec.exec(tool, ['self-update']);
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        tool = await getExecutable(toolDirectory);
+        const selfUpdate = (core.getInput('self-update') || 'true') === 'true';
+        if (selfUpdate) {
+            await exec.exec(tool, ['self-update']);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            await fs.promises.access(tool, fs.constants.X_OK);
+        }
     }
     core.debug(`${ovrPlatformUtil} -> ${toolDirectory}`)
     core.addPath(toolDirectory);
-    try {
-        await exec.exec(ovrPlatformUtil, ['help']);
-    } catch (error) {
-        if (error.code === 'EBUSY') {
-            core.warning(`Waiting for ${tool} to be released...`);
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            await exec.exec(ovrPlatformUtil, ['help']);
-        }
-    }
+    await exec.exec(ovrPlatformUtil, ['help']);
 }
 
 function getDownloadUrl(): string {
@@ -73,8 +67,11 @@ function getTempDirectory(): string {
     return tempDirectory
 }
 
-function getExecutable(directory: string): string {
-    return path.join(directory, toolPath);
+async function getExecutable(directory: string): Promise<string> {
+    const tool = path.join(directory, toolPath);
+    await fs.promises.access(tool, fs.constants.X_OK);
+    core.debug(`Found ${tool} in ${directory}`);
+    return tool;
 }
 
 async function getVersion(tool: string): Promise<string> {
