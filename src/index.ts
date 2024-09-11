@@ -51,7 +51,7 @@ async function setup_ovrPlatformUtil(): Promise<void> {
         await exec.exec(ovrPlatformUtil, ['help']);
     } catch (error) {
         if (error.code === 'EBUSY') {
-            core.debug(`Waiting for ${tool} to be released...`);
+            core.warning(`Waiting for ${tool} to be released...`);
             await new Promise(resolve => setTimeout(resolve, 1000));
             await exec.exec(ovrPlatformUtil, ['help']);
         }
