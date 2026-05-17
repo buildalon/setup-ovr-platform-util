@@ -7,6 +7,12 @@ A GitHub Action to setup the [`ovr-platform-utility`](https://developer.oculus.c
 ## How to use
 
 ```yaml
+jobs:
+  validate:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
         # download and setup ovr platform util
       - uses: buildalon/setup-ovr-platform-util@v1
@@ -19,3 +25,8 @@ A GitHub Action to setup the [`ovr-platform-utility`](https://developer.oculus.c
 | Name | Description | Required |
 | ---- | ----------- | -------- |
 | `self-update` | Automatically update the ovr-platform-util tool. | Defaults to `true`. |
+
+## Related actions
+
+- [upload-meta-quest-build](https://github.com/buildalon/upload-meta-quest-build)
+
